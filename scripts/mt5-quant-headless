@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Launch the mt5-quant MCP binary under a virtual display (headless/SSH use).
+# Register with: claude mcp add mt5-quant -- /path/to/scripts/mt5-quant-headless
+# Set MT5_QUANT_BIN to override the binary location.
+set -euo pipefail
+BIN="${MT5_QUANT_BIN:-$HOME/Documents/code/mt5-quant/mcp-mt5-quant-linux/mt5-quant}"
+exec xvfb-run -a "$BIN" "$@"
