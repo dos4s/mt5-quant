@@ -31,11 +31,24 @@ symlinks with `scripts/apply-linux-fixes.sh`.
    The tester loads `MQL5/Profiles/Tester/<EAName>.set`, which the MCP
    regenerates from the EA's *compiled default inputs* on every launch; the
    `set_file` you pass is recorded in metadata but never applied, and manually
-   overwriting the preset gets clobbered too.
+   overwriting the preset gets clobbered too. Root cause: the MCP can't parse
+   MT5-format .set files at all — `write_set_file` / `list_set_files` report
+   `param_count 0`.
    Workaround: edit the EA source input defaults + `compile_ea`, then the
    regenerated preset carries them. For sweeps, edit+recompile per value.
    Always verify actual params via the tester journal line
    `…started with inputs:` (`get_tester_log`).
+   Related: multi-symbol EAs need model 1 or 0 — model 2 ("open prices")
+   throws *"wrong timeframe request"* on the secondary symbol's M1.
+
+4b. **MCP backtests run on an OFFLINE local tester agent** that may not see
+   the broker's data at all (on AXI: pip-denominated, ~0 bars). The terminal's
+   MAIN tester, run *connected* via a `[Tester]` startup config, works
+   correctly (real data, USD). `scripts/bt.py` is a standalone harness for
+   that path: it launches the terminal with a generated tester config, waits,
+   parses MT5's own HTML report, and appends metrics to `rankings.jsonl`
+   (canonical copy + driver scripts live in `../research/`). EAs must still be
+   compiled via `compile_ea` first and exist at `Experts/<name>/<name>.ex5`.
 
 5. **`get_latest_report` returns stale/duplicate metrics** across genuinely
    different runs. Compute metrics from a per-report `export_deals_csv`
