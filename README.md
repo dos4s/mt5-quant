@@ -2,6 +2,11 @@
 
 **MCP server for MT5 strategy development on macOS/Linux.** 89 tools to compile, backtest, analyze, optimize, debug crashes, and manage MQL5 Expert Advisors — no Windows required.
 
+> **Windows?** A native (no-Wine) backend lives in [`windows/`](windows/) — Python, wraps the
+> `MetaTrader5` package + `metaeditor64.exe`, talks to a running terminal. Register with
+> `python launch.py`: it dispatches to the Windows backend on Windows and to this Rust/Wine binary
+> on Linux/macOS, so one MCP entry works everywhere.
+
 ```
 You: "Backtest MyEA Jan-Mar, what caused the February drawdown?"
 

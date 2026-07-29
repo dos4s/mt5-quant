@@ -37,3 +37,7 @@ config/backtest_history.json
 # Added by cargo
 
 /target
+
+# Windows Python backend
+__pycache__/
+*.pyc
